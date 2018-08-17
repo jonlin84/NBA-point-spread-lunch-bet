@@ -106,5 +106,3 @@ venv.bak/
 # pkl
 *.pkl
 
-#keep ipynb files local for this repo 
-*.ipynb 
