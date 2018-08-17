@@ -104,7 +104,7 @@ venv.bak/
 .mypy_cache/
 
 # pkl
-*.pklo
+*.pkl
 
 #keep ipynb files local for this repo 
 *.ipynb 
