@@ -1,7 +1,7 @@
-from collections import defaultdict
 import time
 import requests
 from bs4 import BeautifulSoup
+from pymongo import MongoClient
 
 
 #returns basketball-refrence.com/teams/{teamname}/{year}_games.html
