@@ -288,7 +288,7 @@ def create_dataframe_matchups(team1:str,team2:list,team_avg:dict,year:str,weight
         lst.append(team_sampler(team1,team,team_avg,year,weight,samples))
     df = pd.DataFrame(lst)
     df.columns = columns
-    df.index = range(1,83)
+    df.index = range(1,len(df)+1)
     return df
 
 def final_df_creator(team:str,year:str,spread_df,team_avg:dict,weight=.5,samples=1):
@@ -303,7 +303,7 @@ def final_df_creator(team:str,year:str,spread_df,team_avg:dict,weight=.5,samples
     '''
 
     df = copy.deepcopy(spread_df[(spread_df.team == team) & (spread_df.year == year)])
-    df.index = range(1,83)
+    df.index = range(1,len(df)+1)
     opp = df.opp.values
     new_df = create_dataframe_matchups(team,opp,team_avg,year,weight,samples)
     final_df = pd.concat([df[['spread','home']],new_df],axis=1)
