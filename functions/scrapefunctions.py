@@ -109,15 +109,26 @@ team_dic = {  'Dallas':'DAL','Boston':'BOS','Toronto':'TOR','Denver':'DEN','Phil
 '''
 
 #function to change the string in opponent to 3 letter abbreviation consistent for search
+#used in spread dataframe.
 def switch_to_key(x):
     for k,v in team_dic.items():
         if k in x:
             return v
 
 #takes dataframe and list of teams('strings') 
+
 def dataframe_separator(df,teams:list):
+    #returns a dictionary with team abbreviation as keys and dataframes as values
     lst = []
     for team in teams:
         lst.append(copy.deepcopy(df[df.team == f'{team}']))
     return dict(zip(teams,lst))
 
+#this is a redundant function, above function preserves df no need to cast to dataframe
+'''
+def dic_df_maker(dct,teams):
+    dic_df = {}
+    for team in teams:
+        dic_df[team] = pd.DataFrame(dct[team])
+    return dic_df
+'''
