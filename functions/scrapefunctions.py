@@ -294,12 +294,13 @@ def create_dataframe_matchups(team1:str,team2:list,team_avg:dict,year:str,weight
 def final_df_creator(team:str,year:str,spread_df,team_avg:dict,weight=.5,samples=1):
     '''
     takes 3 letter team abbreviation, the year as a string, the cleaned spread_df, dictionary and returns
-    2 dataframes; final_df: all the transformed features and y: the labels
+    2 dataframes; final_df: all the transformed features and y_df: the labels ; final_df, y_df
     
     weight: is the weighted distribution of the home team, currently it weights each season but feature implementations
     will attempt to adjust individual games, default = .5 (even weight for both team)
 
     sample: number of random samples from generated distributions to average, default = 1
+    '''
 
     df = copy.deepcopy(spread_df[(spread_df.team == team) & (spread_df.year == year)])
     df.index = range(1,83)
