@@ -260,7 +260,8 @@ def team_sampler(team1:str,team2:str,avgs:dict,year:str,weight=.5,samples=1):
                             * pd.DataFrame(avgs[team2][year]).tov.values[0]\
                             , (((weight**2) * pd.DataFrame(avgs[team1][year]).opp_tov.values[1]) + ((1-weight)**2) \
                             * pd.DataFrame(avgs[team2][year]).tov.values[1])).rvs(samples).mean()
-    
+    #team points should be an aggregation of other generated stats
+    '''
     team1_pts    = stats.norm(weight * pd.DataFrame(avgs[team1][year]).pts.values[0] + (1-weight) \
                             * pd.DataFrame(avgs[team2][year]).opp_pts.values[0] \
                             , (((weight**2) * pd.DataFrame(avgs[team1][year]).pts.values[1]) + ((1-weight)**2) \
@@ -270,8 +271,8 @@ def team_sampler(team1:str,team2:str,avgs:dict,year:str,weight=.5,samples=1):
                             * pd.DataFrame(avgs[team2][year]).pts.values[0]\
                             , (((weight**2) * pd.DataFrame(avgs[team1][year]).opp_pts.values[1]) + ((1-weight)**2) \
                             * pd.DataFrame(avgs[team2][year]).pts.values[1])).rvs(samples).mean()
-    
+    '''
     return [team1_fg, team1_fga, team1_fg3, team1_fg3a, team1_ft,team1_fta,team1_orb,team1_drb,team1_ast,team1_stl \
-          , team1_blk,team1_tov,team1_pts,
+          , team1_blk,team1_tov,
             team2_fg, team2_fga, team2_fg3, team2_fg3a, team2_ft,team2_fta,team2_orb,team2_drb,team2_ast,team2_stl\
-           ,team2_blk,team2_tov,team2_pts]
+           ,team2_blk,team2_tov]
