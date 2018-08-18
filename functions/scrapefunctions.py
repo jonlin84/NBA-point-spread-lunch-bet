@@ -2,7 +2,8 @@ import time
 import requests
 from bs4 import BeautifulSoup
 from pymongo import MongoClient
-
+import pandas as pd
+import scipy.stats as stats
 
 #returns basketball-refrence.com/teams/{teamname}/{year}_games.html
 def box_score_url_creator(team:str,year:str,baseurl:str)->list:
@@ -106,6 +107,9 @@ team_dic = {  'Dallas':'DAL','Boston':'BOS','Toronto':'TOR','Denver':'DEN','Phil
             , 'Oklahoma City':'OKC', 'Milwaukee':'MIL','Phoenix':'PHO','Sacramento':'SAC','New Orleans':'NOP'\
             , 'Indiana':'IND','Portland':'POR','Brooklyn':'BRK', 'Golden State':'GSW','Chicago':'CHI'\
             , 'LA Lakers':'LAL','Memphis':'MEM','Atlanta':'ATL','Utah':'UTA','Minnesota':'MIN'}
+
+team_variables = ['fg','fga','fg3','fg3a','ft','fta', 'orb','drb', 'trb', 'ast', 'stl', 'blk', 'tov', 'pts', 'pf', \
+'opp_fg', 'opp,fga', 'opp_fg3', 'opp_fg3a', 'opp_ft', 'opp_fta', 'opp_orb', 'opp_drb', 'opp_trb', 'opp_ast', 'opp_stl', 'opp_blk', 'opp_tov', 'opp_pf', 'opp_pts']
 '''
 
 #function to change the string in opponent to 3 letter abbreviation consistent for search
@@ -132,3 +136,42 @@ def dic_df_maker(dct,teams):
         dic_df[team] = pd.DataFrame(dct[team])
     return dic_df
 '''
+
+def team_sampler(team1:str,team2:str,avgs:dict,year:str,weight=.5,samples=1):
+    #samples from two team averages and returns the average sample for each category
+    team1_fg = stats.norm(weight * pd.DataFrame(avgs[team1][year]).fg.values[0] + (1-weight) * pd.DataFrame(avgs[team2][year]).opp_fg.values[0]\
+                          , (((weight**2) * pd.DataFrame(avgs[team1][year]).fg.values[1]) + ((1-weight)**2) \
+                          * pd.DataFrame(avgs[team2][year]).opp_fg.values[1])).rvs(samples).mean()
+    
+    team2_fg = stats.norm(weight * pd.DataFrame(avgs[team1][year]).opp_fg.values[0] + (1-weight) * pd.DataFrame(avgs[team2][year]).fg.values[0]\
+                          , (((weight**2) * pd.DataFrame(avgs[team1][year]).opp_fg.values[1]) + ((1-weight)**2) \
+                          * pd.DataFrame(avgs[team2][year]).fg.values[1])).rvs(samples).mean()
+    
+    team1_fga = stats.norm(weight * pd.DataFrame(avgs[team1][year]).fga.values[0] + (1-weight) * pd.DataFrame(avgs[team2][year]).opp_fga.values[0]\
+                          , (((weight**2) * pd.DataFrame(avgs[team1][year]).fga.values[1]) + ((1-weight)**2) \
+                          * pd.DataFrame(avgs[team2][year]).opp_fga.values[1])).rvs(samples).mean()
+    
+    team2_fga = stats.norm(weight * pd.DataFrame(avgs[team1][year]).opp_fga.values[0] + (1-weight) * pd.DataFrame(avgs[team2][year]).fga.values[0]\
+                          , (((weight**2) * pd.DataFrame(avgs[team1][year]).opp_fga.values[1]) + ((1-weight)**2) \
+                          * pd.DataFrame(avgs[team2][year]).fga.values[1])).rvs(samples).mean()
+    
+    team1_fg3 = stats.norm(weight * pd.DataFrame(avgs[team1][year]).fg3.values[0] + (1-weight) * pd.DataFrame(avgs[team2][year]).opp_fg3.values[0]\
+                          , (((weight**2) * pd.DataFrame(avgs[team1][year]).fg3.values[1]) + ((1-weight)**2) \
+                          * pd.DataFrame(avgs[team2][year]).opp_fg3.values[1])).rvs(samples).mean()
+    
+    team2_fg3 = stats.norm(weight * pd.DataFrame(avgs[team1][year]).opp_fg3.values[0] + (1-weight) \
+                            * pd.DataFrame(avgs[team2][year]).fg3.values[0]\
+                            , (((weight**2) * pd.DataFrame(avgs[team1][year]).opp_fg3.values[1]) + ((1-weight)**2) \
+                            * pd.DataFrame(avgs[team2][year]).fg3.values[1])).rvs(samples).mean()
+    
+    team1_fg3a = stats.norm(weight * pd.DataFrame(avgs[team1][year]).fg3a.values[0] + (1-weight) \
+                            * pd.DataFrame(avgs[team2][year]).opp_fg3a.values[0] \
+                            , (((weight**2) * pd.DataFrame(avgs[team1][year]).fg3a.values[1]) + ((1-weight)**2) \
+                            * pd.DataFrame(avgs[team2][year]).opp_fg3a.values[1])).rvs(samples).mean()
+    
+    team2_fg3a = stats.norm(weight * pd.DataFrame(avgs[team1][year]).opp_fg3a.values[0] + (1-weight) \
+                            * pd.DataFrame(avgs[team2][year]).fg3a.values[0]\
+                            , (((weight**2) * pd.DataFrame(avgs[team1][year]).opp_fg3a.values[1]) + ((1-weight)**2) \
+                            * pd.DataFrame(avgs[team2][year]).fg3a.values[1])).rvs(samples).mean()
+    
+    return [team1_fg, team1_fga, team1_fg3, team1_fg3a, team2_fg, team2_fga, team2_fg3, team2_fg3a]
