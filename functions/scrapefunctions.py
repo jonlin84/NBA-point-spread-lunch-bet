@@ -137,29 +137,34 @@ def dic_df_maker(dct,teams):
     return dic_df
 '''
 
+#probably recode where it can take values from a dictionary vs roundabout way of converting to df
 def team_sampler(team1:str,team2:str,avgs:dict,year:str,weight=.5,samples=1):
-    #samples from two team averages and returns the average sample for each category
+    '''
+    takes two team inputs and a dictionary with teams as keys and values as averages and standard deviations
+    the sample weight is with respect to team1
+    '''
+
     team1_fg = stats.norm(weight * pd.DataFrame(avgs[team1][year]).fg.values[0] + (1-weight) * pd.DataFrame(avgs[team2][year]).opp_fg.values[0]\
                           , (((weight**2) * pd.DataFrame(avgs[team1][year]).fg.values[1]) + ((1-weight)**2) \
                           * pd.DataFrame(avgs[team2][year]).opp_fg.values[1])).rvs(samples).mean()
     
-    team2_fg = stats.norm(weight * pd.DataFrame(avgs[team1][year]).opp_fg.values[0] + (1-weight) * pd.DataFrame(avgs[team2][year]).fg.values[0]\
+    team2_fg   = stats.norm(weight * pd.DataFrame(avgs[team1][year]).opp_fg.values[0] + (1-weight) * pd.DataFrame(avgs[team2][year]).fg.values[0]\
                           , (((weight**2) * pd.DataFrame(avgs[team1][year]).opp_fg.values[1]) + ((1-weight)**2) \
                           * pd.DataFrame(avgs[team2][year]).fg.values[1])).rvs(samples).mean()
     
-    team1_fga = stats.norm(weight * pd.DataFrame(avgs[team1][year]).fga.values[0] + (1-weight) * pd.DataFrame(avgs[team2][year]).opp_fga.values[0]\
+    team1_fga  = stats.norm(weight * pd.DataFrame(avgs[team1][year]).fga.values[0] + (1-weight) * pd.DataFrame(avgs[team2][year]).opp_fga.values[0]\
                           , (((weight**2) * pd.DataFrame(avgs[team1][year]).fga.values[1]) + ((1-weight)**2) \
                           * pd.DataFrame(avgs[team2][year]).opp_fga.values[1])).rvs(samples).mean()
     
-    team2_fga = stats.norm(weight * pd.DataFrame(avgs[team1][year]).opp_fga.values[0] + (1-weight) * pd.DataFrame(avgs[team2][year]).fga.values[0]\
+    team2_fga  = stats.norm(weight * pd.DataFrame(avgs[team1][year]).opp_fga.values[0] + (1-weight) * pd.DataFrame(avgs[team2][year]).fga.values[0]\
                           , (((weight**2) * pd.DataFrame(avgs[team1][year]).opp_fga.values[1]) + ((1-weight)**2) \
                           * pd.DataFrame(avgs[team2][year]).fga.values[1])).rvs(samples).mean()
     
-    team1_fg3 = stats.norm(weight * pd.DataFrame(avgs[team1][year]).fg3.values[0] + (1-weight) * pd.DataFrame(avgs[team2][year]).opp_fg3.values[0]\
+    team1_fg3  = stats.norm(weight * pd.DataFrame(avgs[team1][year]).fg3.values[0] + (1-weight) * pd.DataFrame(avgs[team2][year]).opp_fg3.values[0]\
                           , (((weight**2) * pd.DataFrame(avgs[team1][year]).fg3.values[1]) + ((1-weight)**2) \
                           * pd.DataFrame(avgs[team2][year]).opp_fg3.values[1])).rvs(samples).mean()
     
-    team2_fg3 = stats.norm(weight * pd.DataFrame(avgs[team1][year]).opp_fg3.values[0] + (1-weight) \
+    team2_fg3  = stats.norm(weight * pd.DataFrame(avgs[team1][year]).opp_fg3.values[0] + (1-weight) \
                             * pd.DataFrame(avgs[team2][year]).fg3.values[0]\
                             , (((weight**2) * pd.DataFrame(avgs[team1][year]).opp_fg3.values[1]) + ((1-weight)**2) \
                             * pd.DataFrame(avgs[team2][year]).fg3.values[1])).rvs(samples).mean()
@@ -174,4 +179,99 @@ def team_sampler(team1:str,team2:str,avgs:dict,year:str,weight=.5,samples=1):
                             , (((weight**2) * pd.DataFrame(avgs[team1][year]).opp_fg3a.values[1]) + ((1-weight)**2) \
                             * pd.DataFrame(avgs[team2][year]).fg3a.values[1])).rvs(samples).mean()
     
-    return [team1_fg, team1_fga, team1_fg3, team1_fg3a, team2_fg, team2_fga, team2_fg3, team2_fg3a]
+    team1_ft   = stats.norm(weight * pd.DataFrame(avgs[team1][year]).ft.values[0] + (1-weight) \
+                            * pd.DataFrame(avgs[team2][year]).opp_ft.values[0] \
+                            , (((weight**2) * pd.DataFrame(avgs[team1][year]).ft.values[1]) + ((1-weight)**2) \
+                            * pd.DataFrame(avgs[team2][year]).opp_ft.values[1])).rvs(samples).mean()
+    
+    team2_ft    = stats.norm(weight * pd.DataFrame(avgs[team1][year]).opp_ft.values[0] + (1-weight) \
+                            * pd.DataFrame(avgs[team2][year]).ft.values[0]\
+                            , (((weight**2) * pd.DataFrame(avgs[team1][year]).opp_ft.values[1]) + ((1-weight)**2) \
+                            * pd.DataFrame(avgs[team2][year]).ft.values[1])).rvs(samples).mean()
+    
+    team1_fta   = stats.norm(weight * pd.DataFrame(avgs[team1][year]).fta.values[0] + (1-weight) \
+                            * pd.DataFrame(avgs[team2][year]).opp_fta.values[0] \
+                            , (((weight**2) * pd.DataFrame(avgs[team1][year]).fta.values[1]) + ((1-weight)**2) \
+                            * pd.DataFrame(avgs[team2][year]).opp_fta.values[1])).rvs(samples).mean()
+    
+    team2_fta   = stats.norm(weight * pd.DataFrame(avgs[team1][year]).opp_fta.values[0] + (1-weight) \
+                            * pd.DataFrame(avgs[team2][year]).fta.values[0]\
+                            , (((weight**2) * pd.DataFrame(avgs[team1][year]).opp_fta.values[1]) + ((1-weight)**2) \
+                            * pd.DataFrame(avgs[team2][year]).fta.values[1])).rvs(samples).mean()
+    
+    team1_orb   = stats.norm(weight * pd.DataFrame(avgs[team1][year]).orb.values[0] + (1-weight) \
+                            * pd.DataFrame(avgs[team2][year]).opp_orb.values[0] \
+                            , (((weight**2) * pd.DataFrame(avgs[team1][year]).orb.values[1]) + ((1-weight)**2) \
+                            * pd.DataFrame(avgs[team2][year]).opp_orb.values[1])).rvs(samples).mean()
+    
+    team2_orb   = stats.norm(weight * pd.DataFrame(avgs[team1][year]).opp_orb.values[0] + (1-weight) \
+                            * pd.DataFrame(avgs[team2][year]).orb.values[0]\
+                            , (((weight**2) * pd.DataFrame(avgs[team1][year]).opp_orb.values[1]) + ((1-weight)**2) \
+                            * pd.DataFrame(avgs[team2][year]).orb.values[1])).rvs(samples).mean()
+    
+    team1_drb   = stats.norm(weight * pd.DataFrame(avgs[team1][year]).drb.values[0] + (1-weight) \
+                            * pd.DataFrame(avgs[team2][year]).opp_drb.values[0] \
+                            , (((weight**2) * pd.DataFrame(avgs[team1][year]).drb.values[1]) + ((1-weight)**2) \
+                            * pd.DataFrame(avgs[team2][year]).opp_drb.values[1])).rvs(samples).mean()
+    
+    team2_drb   = stats.norm(weight * pd.DataFrame(avgs[team1][year]).opp_drb.values[0] + (1-weight) \
+                            * pd.DataFrame(avgs[team2][year]).drb.values[0]\
+                            , (((weight**2) * pd.DataFrame(avgs[team1][year]).opp_drb.values[1]) + ((1-weight)**2) \
+                            * pd.DataFrame(avgs[team2][year]).drb.values[1])).rvs(samples).mean()
+    
+    #total rebounds should just be the sum of orb and drb which i will intially leave it out
+    
+    team1_ast    = stats.norm(weight * pd.DataFrame(avgs[team1][year]).ast.values[0] + (1-weight) \
+                            * pd.DataFrame(avgs[team2][year]).opp_ast.values[0] \
+                            , (((weight**2) * pd.DataFrame(avgs[team1][year]).ast.values[1]) + ((1-weight)**2) \
+                            * pd.DataFrame(avgs[team2][year]).opp_ast.values[1])).rvs(samples).mean()
+    
+    team2_ast    = stats.norm(weight * pd.DataFrame(avgs[team1][year]).opp_ast.values[0] + (1-weight) \
+                            * pd.DataFrame(avgs[team2][year]).ast.values[0]\
+                            , (((weight**2) * pd.DataFrame(avgs[team1][year]).opp_ast.values[1]) + ((1-weight)**2) \
+                            * pd.DataFrame(avgs[team2][year]).ast.values[1])).rvs(samples).mean()
+    
+    team1_stl    = stats.norm(weight * pd.DataFrame(avgs[team1][year]).stl.values[0] + (1-weight) \
+                            * pd.DataFrame(avgs[team2][year]).opp_stl.values[0] \
+                            , (((weight**2) * pd.DataFrame(avgs[team1][year]).stl.values[1]) + ((1-weight)**2) \
+                            * pd.DataFrame(avgs[team2][year]).opp_stl.values[1])).rvs(samples).mean()
+    
+    team2_stl    = stats.norm(weight * pd.DataFrame(avgs[team1][year]).opp_stl.values[0] + (1-weight) \
+                            * pd.DataFrame(avgs[team2][year]).stl.values[0]\
+                            , (((weight**2) * pd.DataFrame(avgs[team1][year]).opp_stl.values[1]) + ((1-weight)**2) \
+                            * pd.DataFrame(avgs[team2][year]).stl.values[1])).rvs(samples).mean()
+    
+    team1_blk    = stats.norm(weight * pd.DataFrame(avgs[team1][year]).blk.values[0] + (1-weight) \
+                            * pd.DataFrame(avgs[team2][year]).opp_blk.values[0] \
+                            , (((weight**2) * pd.DataFrame(avgs[team1][year]).blk.values[1]) + ((1-weight)**2) \
+                            * pd.DataFrame(avgs[team2][year]).opp_blk.values[1])).rvs(samples).mean()
+    
+    team2_blk    = stats.norm(weight * pd.DataFrame(avgs[team1][year]).opp_blk.values[0] + (1-weight) \
+                            * pd.DataFrame(avgs[team2][year]).blk.values[0]\
+                            , (((weight**2) * pd.DataFrame(avgs[team1][year]).opp_blk.values[1]) + ((1-weight)**2) \
+                            * pd.DataFrame(avgs[team2][year]).blk.values[1])).rvs(samples).mean()
+    
+    team1_tov    = stats.norm(weight * pd.DataFrame(avgs[team1][year]).tov.values[0] + (1-weight) \
+                            * pd.DataFrame(avgs[team2][year]).opp_tov.values[0] \
+                            , (((weight**2) * pd.DataFrame(avgs[team1][year]).tov.values[1]) + ((1-weight)**2) \
+                            * pd.DataFrame(avgs[team2][year]).opp_tov.values[1])).rvs(samples).mean()
+    
+    team2_tov    = stats.norm(weight * pd.DataFrame(avgs[team1][year]).opp_tov.values[0] + (1-weight) \
+                            * pd.DataFrame(avgs[team2][year]).tov.values[0]\
+                            , (((weight**2) * pd.DataFrame(avgs[team1][year]).opp_tov.values[1]) + ((1-weight)**2) \
+                            * pd.DataFrame(avgs[team2][year]).tov.values[1])).rvs(samples).mean()
+    
+    team1_pts    = stats.norm(weight * pd.DataFrame(avgs[team1][year]).pts.values[0] + (1-weight) \
+                            * pd.DataFrame(avgs[team2][year]).opp_pts.values[0] \
+                            , (((weight**2) * pd.DataFrame(avgs[team1][year]).pts.values[1]) + ((1-weight)**2) \
+                            * pd.DataFrame(avgs[team2][year]).opp_pts.values[1])).rvs(samples).mean()
+    
+    team2_pts    = stats.norm(weight * pd.DataFrame(avgs[team1][year]).opp_pts.values[0] + (1-weight) \
+                            * pd.DataFrame(avgs[team2][year]).pts.values[0]\
+                            , (((weight**2) * pd.DataFrame(avgs[team1][year]).opp_pts.values[1]) + ((1-weight)**2) \
+                            * pd.DataFrame(avgs[team2][year]).pts.values[1])).rvs(samples).mean()
+    
+    return [team1_fg, team1_fga, team1_fg3, team1_fg3a, team1_ft,team1_fta,team1_orb,team1_drb,team1_ast,team1_stl \
+          , team1_blk,team1_tov,team1_pts,
+            team2_fg, team2_fga, team2_fg3, team2_fg3a, team2_ft,team2_fta,team2_orb,team2_drb,team2_ast,team2_stl\
+           ,team2_blk,team2_tov,team2_pts]
