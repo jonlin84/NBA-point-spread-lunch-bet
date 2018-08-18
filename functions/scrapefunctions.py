@@ -276,3 +276,35 @@ def team_sampler(team1:str,team2:str,avgs:dict,year:str,weight=.5,samples=1):
           , team1_blk,team1_tov,
             team2_fg, team2_fga, team2_fg3, team2_fg3a, team2_ft,team2_fta,team2_orb,team2_drb,team2_ast,team2_stl\
            ,team2_blk,team2_tov]
+
+
+def create_dataframe_matchups(team1:str,team2:list,team_avg:dict,year:str,weight=.5,samples=1):
+    lst = []
+    columns = ['team1_fg','team1_fga','team1_fg3','team1_fg3a','team1_ft','team1_fta','team1_orb','team1_drb'\
+          ,'team1_ast','team1_stl','team1_blk','team1_tov','team2_fg','team2_fga','team2_fg3','team2_fg3a'\
+          ,'team2_ft','team2_fta','team2_orb','team2_drb'\
+          ,'team2_ast','team2_stl','team2_blk','team2_tov']
+    for team in team2:
+        lst.append(team_sampler(team1,team,team_avg,year,weight,samples))
+    df = pd.DataFrame(lst)
+    df.columns = columns
+    df.index = range(1,83)
+    return df
+
+def final_df_creator(team:str,year:str,spread_df,team_avg:dict,weight=.5,samples=1):
+    '''
+    takes 3 letter team abbreviation, the year as a string, the cleaned spread_df, dictionary and returns
+    2 dataframes; final_df: all the transformed features and y: the labels
+    
+    weight: is the weighted distribution of the home team, currently it weights each season but feature implementations
+    will attempt to adjust individual games, default = .5 (even weight for both team)
+
+    sample: number of random samples from generated distributions to average, default = 1
+
+    df = copy.deepcopy(spread_df[(spread_df.team == team) & (spread_df.year == year)])
+    df.index = range(1,83)
+    opp = df.opp.values
+    new_df = create_dataframe_matchups(team,opp,team_avg,year,weight,samples)
+    final_df = pd.concat([df[['spread','home']],new_df],axis=1)
+    y_df = df.ats
+    return final_df, y_df
