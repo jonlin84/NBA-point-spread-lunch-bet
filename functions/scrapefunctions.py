@@ -301,11 +301,15 @@ def final_df_creator(team:str,year:str,spread_df,team_avg:dict,weight=.5,samples
 
     sample: number of random samples from generated distributions to average, default = 1
     '''
-
+    
     df = copy.deepcopy(spread_df[(spread_df.team == team) & (spread_df.year == year)])
+    ats_record = np.insert((np.cumsum(df.ats.values[1:]))/range(1,82),0,0.0)
+    df['ats_record'] = ats_record
     df.index = range(1,len(df)+1)
     opp = df.opp.values
     new_df = create_dataframe_matchups(team,opp,team_avg,year,weight,samples)
-    final_df = pd.concat([df[['spread','home']],new_df],axis=1)
+    final_df = pd.concat([df[['spread','home','ats_record']],new_df],axis=1)
     y_df = df.ats
     return final_df, y_df
+   
+    
