@@ -338,3 +338,15 @@ def season_concat_def(teams:list,year:str,team_avg:dict,spread):
         y_df = pd.concat([y_df,final_df_creator(team,year,spread,team_avg)[1]],axis=0)
     
     return x_df, y_df
+
+
+#takes a single game lookups up values and populates
+def single_game_test(team1,team2,spread,home,ats_rec,team_avg,year,weight=.5):
+    '''
+    returns predict scenario
+    '''
+    return pd.concat([pd.DataFrame([spread,home,ats_rec]),pd.DataFrame(team_sampler(team1,team2,team_avg,year,weight))], axis = 0).T
+
+#for webapp the information will be coded to drop down menus and the input will go into single_game_test
+#then run predict_proba using the fit model and output both percentages with respect to the home team
+#be careful because the first value is probability the team will NOT cover (0.0 label). 
