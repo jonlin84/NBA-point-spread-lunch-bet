@@ -4,6 +4,8 @@ from bs4 import BeautifulSoup
 from pymongo import MongoClient
 import pandas as pd
 import scipy.stats as stats
+import copy
+import numpy as np
 
 #returns basketball-refrence.com/teams/{teamname}/{year}_games.html
 def box_score_url_creator(team:str,year:str,baseurl:str)->list:
@@ -141,8 +143,10 @@ def dic_df_maker(dct,teams):
 def team_sampler(team1:str,team2:str,avgs:dict,year:str,weight=.5,samples=1):
     '''
     takes two team inputs and a dictionary with teams as keys and values as averages and standard deviations
+    it attempts to generate a sample game using the previous year's data
     the sample weight is with respect to team1
     '''
+    year = str(int(year)-1)
 
     team1_fg = stats.norm(weight * pd.DataFrame(avgs[team1][year]).fg.values[0] + (1-weight) * pd.DataFrame(avgs[team2][year]).opp_fg.values[0]\
                           , (((weight**2) * pd.DataFrame(avgs[team1][year]).fg.values[1]) + ((1-weight)**2) \
@@ -319,14 +323,14 @@ def profit(winrate,games=1,unit=100):
      '''
      return winrate * games * unit + (1-winrate) * games * unit * (-1.1)
 
-def season_concat_def(teams:list,years:str,team_avg:dict,spread):
+def season_concat_def(teams:list,year:str,team_avg:dict,spread):
     '''
     creates empty dataframe then takes runs final_df_creator function and concatenates each team
     into one long list
     current run time for 1 season is ~15 minutes <--- ATTEMPT TO OPTIMIZE IN FUTURE ITERATIONS
        
     '''
-    
+
     x_df = pd.DataFrame()
     y_df = pd.DataFrame()
     for team in teams:
