@@ -301,7 +301,7 @@ def final_df_creator(team:str,year:str,spread_df,team_avg:dict,weight=.5,samples
 
     sample: number of random samples from generated distributions to average, default = 1
     '''
-    
+
     df = copy.deepcopy(spread_df[(spread_df.team == team) & (spread_df.year == year)])
     ats_record = np.insert((np.cumsum(df.ats.values[1:]))/range(1,82),0,0.0)
     df['ats_record'] = ats_record
@@ -312,4 +312,25 @@ def final_df_creator(team:str,year:str,spread_df,team_avg:dict,weight=.5,samples
     y_df = df.ats
     return final_df, y_df
    
+def profit(winrate,games=1,unit=100):
+     '''
+     returns expected value for each game bet on
+     unit = amount bet on each game
+     '''
+     return winrate * games * unit + (1-winrate) * games * unit * (-1.1)
+
+def season_concat_def(teams:list,years:str,team_avg:dict,spread):
+    '''
+    creates empty dataframe then takes runs final_df_creator function and concatenates each team
+    into one long list
+    current run time for 1 season is ~15 minutes <--- ATTEMPT TO OPTIMIZE IN FUTURE ITERATIONS
+       
+    '''
     
+    x_df = pd.DataFrame()
+    y_df = pd.DataFrame()
+    for team in teams:
+        x_df = pd.concat([x_df,final_df_creator(team,year,spread,team_avg)[0]],axis=0)
+        y_df = pd.concat([y_df,final_df_creator(team,year,spread,team_avg)[1]],axis=0)
+    
+    return x_df, y_df
