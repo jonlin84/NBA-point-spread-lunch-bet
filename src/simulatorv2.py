@@ -137,3 +137,27 @@ def team_sampler(team1:str,team2:str,avgs:dict,year:str,weight=.5,samples=1):
           , team1_blk,team1_tov, team1_pf, \
             team2_fg_pct, team2_fg3_pct, team2_orb,team2_drb,team2_ast,team2_stl\
            ,team2_blk,team2_tov,team2_pf]
+
+def create_season_test_set(teams,year,team_avg,spread_df,weight=.5,samples=1):
+    x_df = pd.DataFrame()
+    y_df = pd.DataFrame()
+    for team in teams:
+        x,y = spread_prediction_creator(team,year,team_avg,spread_df,weight,samples)
+        x_df = pd.concat([x_df,x],axis=0)
+        y_df = pd.concat([y_df,pd.DataFrame(y)],axis=0)
+    X_test = x_df
+    y_test = y_df.values.reshape(-1)
+    X_test.index = (range(len(X_test)))
+    return X_test, y_test
+
+def create_season_training_set(teams,year,team_avg,spread_df):
+    x_df = pd.DataFrame()
+    y_df = pd.DataFrame()
+    for team in teams:
+        x,y = box_score_grabber(box_2014,team,year,spread_df)
+        x_df = pd.concat([x_df,x],axis=0)
+        y_df = pd.concat([y_df,pd.DataFrame(y)],axis=0)
+    X_train = x_df
+    y_train = y_df.values.reshape(-1)
+    X_train.index = (range(len(X_train)))
+    return X_train, y_train
