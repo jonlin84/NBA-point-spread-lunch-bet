@@ -33,7 +33,7 @@ def prediction_calculator_with_build(X_train,y_train,X_test,y_test,spread_df,tea
     return update_model_pred, first_predictions, first_score, final_score
 
 
-    def create_season_test_set(teams,year,team_avg,spread_df):
+def create_season_test_set(teams,year,team_avg,spread_df):
     x_df = pd.DataFrame()
     y_df = pd.DataFrame()
     for team in teams:
