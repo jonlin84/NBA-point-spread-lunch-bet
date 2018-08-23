@@ -17,7 +17,7 @@ def box_score_grabber(boxscore,team,year,spread_df):
     y_df = spread.ats.values
     return pd.concat([spread[['spread','ats_record']],df_new],axis=1), y_df
 
-def spread_prediction_creator(home,year,team_avg,spread_df,weight=.5,samples=1):
+def spread_prediction_creator(team,year,team_avg,spread_df,weight=.5,samples=1):
     df = copy.deepcopy(spread_df[(spread_df.team == team) & (spread_df.year == year)])
     ats_record = np.insert((np.cumsum(df.ats.values[:81]))/range(1,82),0,0.0)
     df['ats_record'] = ats_record
