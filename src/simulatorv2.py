@@ -1,3 +1,9 @@
+import pandas as pd
+import numpy as np
+import copy
+import scipy.stats as stats
+
+
 def box_score_grabber(boxscore,team,year,spread_df):
     df = copy.deepcopy(boxscore[(boxscore.team==team) & (boxscore.year==year)])
     df.index = range(len(df))
@@ -22,7 +28,7 @@ def spread_prediction_creator(home,year,team_avg,spread_df,weight=.5,samples=1):
     y_df = df.ats
     for item in opp:
         lst.append(team_sampler(home,item,team_avg,year,weight=.5,samples=1))
-    return pd.concat([df[['spread','ats_record']],pd.DataFrame(lst,columns=['fg_pct','fg3_pct','orb','drb','ast','stl','blk','tov'\
+    return pd.concat([df[['spread','ats_record']],pd.DataFrame(lst,columns=['fg_pct','fg3_pct','orb','drb','ast','stl','blk','tov','pf'\
               ,'opp_fg_pct','opp_fg3_pct','opp_orb','opp_drb','opp_ast'\
               ,'opp_stl','opp_blk','opp_tov','opp_pf'])],axis=1), y_df
 
