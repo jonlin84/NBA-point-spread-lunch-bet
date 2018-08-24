@@ -1,7 +1,8 @@
 import datetime
 import pandas as pd
 
-
+teams    =    ['ATL','BOS','BRK','CHI','CHO','CLE','DAL','DEN','DET','GSW','HOU','IND','LAC','LAL','MEM','MIA','MIL','MIN','NOP','NYK',\
+              'OKC','ORL', 'PHI','PHO','POR','SAC','SAS','TOR','UTA','WAS']
 #this function is to be run on pickled spread df (which has already been cleaned up to some degree)
 #current runtime approximately 3 minutes on 12300 rows
 
@@ -22,7 +23,7 @@ def spread_transform(df):
     df['b2b_list'] = df.date.apply(lambda x: [x - datetime.timedelta(days=d) for d in range(0,2)])
     df['team_b2b'] = df.apply(lambda x:len(df.loc[df.date.isin(x['b2b_list']) & (df['team']==x['team'])])-1,axis=1)
     df['opp_b2b'] = df.apply(lambda x:len(df.loc[df.date.isin(x['b2b_list']) & (df['team']==x['opp'])])-1,axis=1)
-
+    df['s_double'] = df.spread.apply(lambda x: 1 if x >= 10 else(1 if x <= -10 else 0))
 
     return df.drop(columns=['b2b_list','dt_list'],axis=1)
 
