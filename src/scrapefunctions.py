@@ -63,7 +63,7 @@ def soup_maker(dct:dict):
     return boxscores
 
 #Write a function that extracts data and stores it in proper dictionaries
-#Basica box score stats for each team and also information on officals
+#Basic box score stats for each team and also information on officals
 #assume first official is HEAD OFFICIAL?
 
 #html = r.content, returns dictionary of box score totals
