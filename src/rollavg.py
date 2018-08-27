@@ -1,5 +1,6 @@
 
 import copy
+import datetime
 import numpy as np 
 import pandas as pd 
 from collections import defaultdict
@@ -18,6 +19,7 @@ avg_5_no_pct =  ['avg_mp_last_5','avg_fg_last_5','avg_fga_last_5','avg_fg3_last_
 
 teams    =    ['ATL','BOS','BRK','CHI','CHO','CLE','DAL','DEN','DET','GSW','HOU','IND','LAC','LAL','MEM','MIA','MIL','MIN','NOP','NYK',\
               'OKC','ORL', 'PHI','PHO','POR','SAC','SAS','TOR','UTA','WAS']
+
 
 def spread_transform(df):
     #changes date column to datetime format YYYY-MM-DD
@@ -39,7 +41,8 @@ def spread_transform(df):
     
     #create column for games with double digit spreads
     df['s_double'] = df.spread.apply(lambda x: 1 if x >= 10 else(1 if x <= -10 else 0))
-
+    df['s_less_3'] = df.spread.apply(lambda x: 1 if abs(x) < 3 else 0)
+    df.index = range(len(df))
     return df.drop(columns=['b2b_list','dt_list'],axis=1)
 
 def season_sampler(teams,year,spread_df,boxscore_df):
@@ -57,10 +60,20 @@ def season_sampler(teams,year,spread_df,boxscore_df):
     for team in teams:
         box_team = copy.deepcopy(boxscore_df[(boxscore_df.team==team)&(boxscore_df.year==year)])
         sp = copy.deepcopy(spread_df[(spread_df.team==team)& (spread_df.year==year)])
+        box_team.index = range(len(box_team))
+        sp.index = range(len(sp))
         sp.drop(columns=['team','year','g','date','result','opp','score','ou','total','score_diff','spread_diff'],inplace=True)
-        roll_avg = copy.deepcopy(box_team[avg_list_no_pct].rolling(5, min_periods=5).mean())
+        ats_record = np.insert((np.cumsum(sp.ats.values[:81]))/range(1,82),0,0.0)
+        sp['ats_record'] = ats_record
+        roll_avg = copy.deepcopy(box_team[avg_list_no_pct].rolling(5, min_periods=1).mean())
         roll_avg.columns = avg_5_no_pct
+        insertion = pd.DataFrame(np.zeros(len(avg_list_no_pct))).T
+        insertion.columns = avg_5_no_pct
+        roll_avg = pd.concat([insertion,roll_avg[:-1]],axis=0)
+        roll_avg.index = range(len(roll_avg))
         combined_df = pd.concat([sp,roll_avg],axis=1)
         d[team] = combined_df
-    
+        
     return d
+
+#add function to change home to away
