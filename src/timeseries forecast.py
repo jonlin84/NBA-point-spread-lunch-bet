@@ -62,25 +62,6 @@ def make_single_prediction(data,order=(0,1,1)):
 
 #RMSE was ~17, goal is ~10
 
-def team_sampler(team,year,boxscore_df):
-    fg_fg3_ft =  ['avg_fg_last_5','avg_fg3_last_5','avg_ft_last_5',
-                    'avg_opp_fg_last_5','avg_opp_fg3_last_5','avg_opp_ft_last_5']
-    
-    d = defaultdict(int)
-    for team in teams:
-        box_team = copy.deepcopy(boxscore_df[(boxscore_df.team==team)&(boxscore_df.year==year)])
-        box_team.index = range(len(box_team))
-        roll_avg = copy.deepcopy(box_team[avg_list_no_pct].rolling(5, min_periods=1).mean())
-        roll_avg.columns = avg_5_no_pct
-        insertion = pd.DataFrame(np.zeros(len(avg_list_no_pct))).T
-        insertion.columns = avg_5_no_pct
-        roll_avg = pd.concat([insertion,roll_avg[:-1]],axis=0)
-        roll_avg.index = range(len(roll_avg))
-        combined_df = pd.concat([sp,roll_avg],axis=1)
-        d[team] = combined_df
-        
-    return d
-
 #team sampler work
 def team_sampler(team,opp,year,df):
     s_team = copy.deepcopy(df[(df.t==team) & (df.year==year)])
@@ -101,4 +82,4 @@ def team_sampler(team,opp,year,df):
 
 #I have combined dataframes spread and boxscore into a single pickled file called 
 #THEBIGDATAFRAME (had to score boxscores and values by team then year)
-        
+#finding the correct score column, index by date        
