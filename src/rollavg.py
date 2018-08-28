@@ -77,3 +77,54 @@ def season_sampler(teams,year,spread_df,boxscore_df):
     return d
 
 #add function to change home to away
+
+
+def season_sampler(teams,year,spread_df,boxscore_df):
+    avg_5_no_pct =  ['avg_mp_last_5','avg_fg_last_5','avg_fga_last_5','avg_fg3_last_5',
+                    'avg_fg3a_last_5','avg_ft_last_5','avg_fta_last_5','avg_orb_last_5',
+                    'avg_drb_last_5','avg_trb_last_5','avg_ast_last_5','avg_stl_last_5',
+                    'avg_blk_last_5','avg_tov_last_5','avg_pf_last_5','avg_pts_last_5',
+                    'avg_opp_mp_last_5','avg_opp_fg_last_5','avg_opp_fga_last_5',
+                    'avg_opp_fg3_last_5','avg_opp_fg3a_last_5','avg_opp_ft_last_5',
+                    'avg_opp_fta_last_5','avg_opp_orb_last_5','avg_opp_drb_last_5',
+                    'avg_opp_trb_last_5','avg_opp_ast_last_5','avg_opp_stl_last_5',
+                    'avg_opp_blk_last_5','avg_opp_tov_last_5','avg_opp_pf_last_5','avg_opp_pts_last_5']
+    
+    d = defaultdict(int)
+    for team in teams:
+        box_team = copy.deepcopy(boxscore_df[(boxscore_df.team==team)&(boxscore_df.year==year)])
+        sp = copy.deepcopy(spread_df[(spread_df.team==team)& (spread_df.year==year)])
+        box_team.index = range(len(box_team))
+        sp.index = range(len(sp))
+        sp.drop(columns=['team','year','g','date','result','opp','score','ou','total','score_diff','spread_diff'],inplace=True)
+        ats_record = np.insert((np.cumsum(sp.ats.values[:81]))/range(1,82),0,0.0)
+        sp['ats_record'] = ats_record
+        roll_avg = copy.deepcopy(box_team[avg_list_no_pct].rolling(5, min_periods=1).mean())
+        roll_avg.columns = avg_5_no_pct
+        insertion = pd.DataFrame(np.zeros(len(avg_list_no_pct))).T
+        insertion.columns = avg_5_no_pct
+        roll_avg = pd.concat([insertion,roll_avg[:-1]],axis=0)
+        roll_avg.index = range(len(roll_avg))
+        combined_df = pd.concat([sp,roll_avg],axis=1)
+        d[team] = combined_df
+        
+    return d
+
+    s_team = copy.deepcopy(df[(df.t==team) & (df.year==year)])
+    s_opp = copy.deepcopy(df[(df.opp==opp) & (df.year==year)])
+    fg_fg3_ft     =  ['fg','fg3','ft','opp_fg','opp_fg3','opp_ft']
+    avg_5_fg_fg3_ft =  ['avg_fg_last_5','avg_fg3_last_5','avg_ft_last_5',
+                    'avg_opp_fg_last_5','avg_opp_fg3_last_5','avg_opp_ft_last_5']
+    s_team.index = range(len(s_team))
+    box_team = copy.deepcopy(df[(df.team==team)&(df.year==year)])
+    box_team.index = range(len(box_team))
+    roll_avg = copy.deepcopy(box_team[fg_fg3_ft].rolling(5, min_periods=1).mean())
+    roll_avg.columns = avg_5_fg_fg3_ft
+    insertion = pd.DataFrame(np.zeros(len(fg_fg3_ft))).T
+    insertion.columns = avg_5_fg_fg3_ft
+    roll_avg = pd.concat([insertion,roll_avg[:-1]],axis=0)
+    roll_avg.index = range(len(roll_avg))
+
+
+
+def single_game_

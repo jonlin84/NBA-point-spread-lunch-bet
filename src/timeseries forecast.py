@@ -47,7 +47,7 @@ def make_predictions(data, order=(0,1,1), start=82):
 #as a combination of forecast which is the avg of all instances
 def make_single_prediction(data,order=(0,1,1)):
     model = ARIMA(data,order).fit()
-    return model.forecast()[0] + 0.68 * model.predict()[-1]
+    return model.forecast()[0] + 0.68 * model.predict()[-1], model.sigma2 #variance
 
 # take predicted columns FG, FG3, FGA
 # avg with opp_fg of opponent at the indexed game for opponent (dataframe where team == opp, return index)
@@ -66,9 +66,15 @@ def make_single_prediction(data,order=(0,1,1)):
 def team_sampler(team,opp,year,df):
     s_team = copy.deepcopy(df[(df.t==team) & (df.year==year)])
     s_opp = copy.deepcopy(df[(df.opp==opp) & (df.year==year)])
-    fg_fg3_ft     =  ['fg','fg3','ft','opp_fg','opp_fg3','opp_ft']
-    avg_5_fg_fg3_ft =  ['avg_fg_last_5','avg_fg3_last_5','avg_ft_last_5',
-                    'avg_opp_fg_last_5','avg_opp_fg3_last_5','avg_opp_ft_last_5']
+    avg_5_no_pct =  ['avg_mp_last_5','avg_fg_last_5','avg_fga_last_5','avg_fg3_last_5',
+                    'avg_fg3a_last_5','avg_ft_last_5','avg_fta_last_5','avg_orb_last_5',
+                    'avg_drb_last_5','avg_trb_last_5','avg_ast_last_5','avg_stl_last_5',
+                    'avg_blk_last_5','avg_tov_last_5','avg_pf_last_5','avg_pts_last_5',
+                    'avg_opp_mp_last_5','avg_opp_fg_last_5','avg_opp_fga_last_5',
+                    'avg_opp_fg3_last_5','avg_opp_fg3a_last_5','avg_opp_ft_last_5',
+                    'avg_opp_fta_last_5','avg_opp_orb_last_5','avg_opp_drb_last_5',
+                    'avg_opp_trb_last_5','avg_opp_ast_last_5','avg_opp_stl_last_5',
+                    'avg_opp_blk_last_5','avg_opp_tov_last_5','avg_opp_pf_last_5','avg_opp_pts_last_5']
     s_team.index = range(len(s_team))
     box_team = copy.deepcopy(df[(df.team==team)&(df.year==year)])
     box_team.index = range(len(box_team))
@@ -83,3 +89,7 @@ def team_sampler(team,opp,year,df):
 #I have combined dataframes spread and boxscore into a single pickled file called 
 #THEBIGDATAFRAME (had to score boxscores and values by team then year)
 #finding the correct score column, index by date        
+
+
+#take team avg, opponent rolling average and compile
+
