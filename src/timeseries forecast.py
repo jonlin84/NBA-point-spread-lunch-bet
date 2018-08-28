@@ -82,14 +82,14 @@ def team_sampler(team,year,boxscore_df):
     return d
 
 #team sampler work
-def team_sampler(team,opp,year,boxscore_df,spread):
-    s_team = copy.deepcopy((spread.team==team) & (spread.year==year))
-    s_opp = copy.deepcopy((spread.opp==opp) & (spread.year==year))
+def team_sampler(team,opp,year,df):
+    s_team = copy.deepcopy(df[(df.t==team) & (df.year==year)])
+    s_opp = copy.deepcopy(df[(df.opp==opp) & (df.year==year)])
     fg_fg3_ft     =  ['fg','fg3','ft','opp_fg','opp_fg3','opp_ft']
     avg_5_fg_fg3_ft =  ['avg_fg_last_5','avg_fg3_last_5','avg_ft_last_5',
                     'avg_opp_fg_last_5','avg_opp_fg3_last_5','avg_opp_ft_last_5']
-    
-    box_team = copy.deepcopy(boxscore_df[(boxscore_df.team==team)&(boxscore_df.year==year)])
+    s_team.index = range(len(s_team))
+    box_team = copy.deepcopy(df[(df.team==team)&(df.year==year)])
     box_team.index = range(len(box_team))
     roll_avg = copy.deepcopy(box_team[fg_fg3_ft].rolling(5, min_periods=1).mean())
     roll_avg.columns = avg_5_fg_fg3_ft
@@ -97,5 +97,8 @@ def team_sampler(team,opp,year,boxscore_df,spread):
     insertion.columns = avg_5_fg_fg3_ft
     roll_avg = pd.concat([insertion,roll_avg[:-1]],axis=0)
     roll_avg.index = range(len(roll_avg))
-    return roll_avg
+    return pd.concat([s_team,roll_avg],axis=1)
+
+#I have combined dataframes spread and boxscore into a single pickled file called 
+#THEBIGDATAFRAME (had to score boxscores and values by team then year)
         
