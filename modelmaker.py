@@ -10,12 +10,13 @@ class SpreadModel(object):
     '''
     creates model with specified inputs
     '''
-    def __init__(self,year='2014',rolling_avg=5,spread_home_team=True):
+    def __init__(self,year='2014',rolling_avg=5,spread_home_team=True,without_game_1=False):
         
         if spread_home_team == True:
             self.spread_df = pd.read_pickle('data/home_spread.pkl')
         else:
             self.spread_df = pd.read_pickle('data/away_spread.pkl')
+        self.without_game_1 = without_game_1
         self.box_df = pd.read_pickle('data/THEBIGDATAFRAME.pkl')
         self.team_avg = pd.read_pickle('data/team_avg.pkl')
         self.teams = ['ATL','BOS','BRK','CHI','CHO','CLE','DAL','DEN','DET','GSW','HOU','IND','LAC','LAL',
@@ -129,4 +130,7 @@ class SpreadModel(object):
         df = self._transform_spread()
         X = df.drop(columns=self.drop_columns)
         y = df[['ats','g']]
-        return X.drop(columns='ats'), y 
+        if self.without_game_1:
+            return X[X.g != 1].drop(columns=['g','ats']), y[y.g != 1].drop(columns='g')
+        else:
+            return X.drop(columns=['ats','g']), y.drop(columns='g') 
