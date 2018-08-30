@@ -19,6 +19,7 @@ class SpreadModel(object):
         self.without_game_1 = without_game_1
         self.box_df = pd.read_pickle('data/THEBIGDATAFRAME.pkl')
         self.team_avg = pd.read_pickle('data/team_avg.pkl')
+        self.current_season = '2018'
         self.teams = ['ATL','BOS','BRK','CHI','CHO','CLE','DAL','DEN','DET','GSW','HOU','IND','LAC','LAL',
                       'MEM','MIA','MIL','MIN','NOP','NYK','OKC','ORL', 'PHI','PHO','POR','SAC','SAS',
                       'TOR','UTA','WAS']
@@ -77,7 +78,7 @@ class SpreadModel(object):
     
         sp = self.box_df[(self.box_df['team']==team) & (self.box_df['year']==year)].copy()
         sp.sort_values('g',inplace=True)
-        ats_record = np.insert((np.cumsum(sp.ats.values[:81]))/range(1,82),0,0.0)
+        ats_record = np.insert((np.cumsum(sp.ats.values[:len(sp)-1]))/range(1,len(sp)),0,0.0)
         sp['ats_record'] = ats_record
         sp.index= range(len(sp))
         roll_avg = sp[self.avg_list_no_pct].rolling(self.rolling_avg, min_periods=1).mean()
@@ -134,3 +135,22 @@ class SpreadModel(object):
             return X[X.g != 1].drop(columns=['g','ats']), y[y.g != 1].drop(columns='g')
         else:
             return X.drop(columns=['ats','g']), y.drop(columns='g') 
+
+    def matchup_predict_data(self,home,away,spread):
+        home_rolling = self._current_get_rolling_avg(home,self.current_season)
+        away_rolling = self._current_get_rolling_avg(away,self.current_season)
+        home_data = home_rolling.iloc[len(away_rolling)-1].copy()
+        away_data = away_rolling.iloc[len(away_rolling)-1].copy()
+        away_stats = pd.concat([away_data[self.avg_5_no_pct][:16],away_data[self.avg_5_no_pct][16:]],axis=0).values
+        diff = pd.DataFrame(home_data[self.avg_5_no_pct].values - away_stats).T
+        diff.columns = self.avg_5_no_pct_diff
+        diff['team_ats'] = home_data['ats_record']
+        diff['opp_ats'] = away_data['ats_record']
+        team_5 = home_data['team_last_5']
+        opp_5 = away_data['team_last_5']
+        team_b2b = home_data['team_b2b']
+        opp_b2b = away_data['team_b2b']
+        data = {'spread':[spread],'team_last_5':[team_5],'opp_last_5':[opp_5],'team_b2b':[team_b2b],'opp_b2b':[opp_b2b]}
+        df = pd.DataFrame(data=data)
+        return pd.concat([df,diff],axis=1)
+    
