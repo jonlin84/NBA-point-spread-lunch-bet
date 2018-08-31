@@ -77,5 +77,6 @@ class Scrape():
                 time.sleep(3)
         return boxscores
 
-#populates urls for each team for each year and then generates a dictionary to scrape from
+#populates urls for each team for each year and then generates a dictionary to scrape froms
+
     
