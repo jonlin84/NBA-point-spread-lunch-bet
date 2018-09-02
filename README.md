@@ -16,4 +16,7 @@ ex. if the spread for the Houston Rockets is -5.5 and their average scoring diff
 
 the probability of Houston scoring more than the spread would be (1 - cdf(5.5,7.5,20))) = 53.93%
 
+I am making an assumption that all of my distributions are roughly normally distributed.
+
+
 
