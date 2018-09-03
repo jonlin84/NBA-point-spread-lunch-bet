@@ -3,7 +3,7 @@
 
 I am creating a classification model that predicts the winning of regular season NBA games relative to the spread so I can win more lunch bets against my friend Eric.
 
-# Table of Contents
+## Table of Contents
 
 1. [Motivation](https://github.com/jonlin84/NBA-point-spread-bet/blob/master/README.md#motivation)
 2. [Getting Started](https://github.com/jonlin84/NBA-point-spread-bet/blob/master/README.md#getting-started)
