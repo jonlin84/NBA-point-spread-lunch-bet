@@ -21,6 +21,15 @@ I chose Logistic Regression, Random Forest Classifier and Gradient Boosting Clas
 The idea I had was to use all rolling averages of each team in a particular matchup. I started with a window length of 5 (previous 5 games) and that became the main features I used to transform my data for training. I also included the each team's record against the spread. The record was represented as the proportion of wins against the spread to total games played. 
 This column was a little tricky to create because if you just took the cumulative sum of a team's result against the spread and added it as a feature column it would introduce data leakage. So I took the cumulative sum then shifted the results and inserted a row above with 0.0 for the first game of the season. It also meant excluding the last row of the cumulative sum.
 
+## Results
+Logistic Regression was the most consistent over every iteration of the train/test setup. There were only 3 instances of the 28 train/test scenarios where it failed to return at least 50.0% accuracy. I will try to include graphs of the information as well as a cleaned up jupyter notebook of my work soon.
 
+![alt text](https://github.com/jonlin84/NBA-point-spread-bet/blob/master/images/Logistic%20Regression%20Avgs%20Graph.png)
 
+Random Forest and Gradient Boosting both had several instances where the model performed well below 50.0% (47-48% range)
 
+![alt text](https://github.com/jonlin84/NBA-point-spread-bet/blob/master/images/Logistic%20Regression%20Graph.png)
+
+Using a rolling average of 6 games back offered the best results in terms of overall accuracy so I decided to train my model for next season using that window length. 
+
+Using a 6-game 
