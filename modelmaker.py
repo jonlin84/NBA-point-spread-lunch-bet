@@ -112,19 +112,10 @@ class SpreadModel(object):
             gameid = spread['game_id'][i]
             team = spread['team'][i]
             opp = spread['opp'][i]
-            g = spread['g'][i]
             team_stat = rolling_avg_season[(rolling_avg_season['game_id']==gameid) & (rolling_avg_season['team']==team)].copy()
             opp_stat = rolling_avg_season[(rolling_avg_season['game_id']==gameid)& (rolling_avg_season['team']==opp)].copy()
-            #opp_stats = pd.concat([opp_stat[self.avg_5_no_pct][:16],opp_stat[self.avg_5_no_pct][16:]],axis=0).values
-            #diff = pd.DataFrame(team_stat[self.avg_5_no_pct].values - opp_stats)
-            #diff.columns = self.avg_5_no_pct_diff
-            #print(team_stat[self.avg_5_no_pct][0][16:].values)
-            #diff = pd.DataFrame(home_stats - away_stats).T
-            #opp_stats = pd.concat([opp_stat[self.avg_5_no_pct][16:],opp_stat[self.avg_5_no_pct][:16]],axis=0)
             opp_stats =opp_stat[self.avg_5_no_pct]
             home_stats = team_stat[self.avg_5_no_pct]
-            #opp_col
-            #opp_stats.columns = opp_col
             h_off = (opp_stats.values[0][:16] - home_stats.values[0][:16])  
             o_off = (home_stats.values[0][:16] - opp_stats.values[0][16:]) 
             diff = pd.concat([pd.DataFrame(h_off).T,pd.DataFrame(o_off).T],axis=1)
@@ -158,11 +149,18 @@ class SpreadModel(object):
         away_data = away_rolling.iloc[len(away_rolling)-1].copy()
         away_stats = pd.concat([away_data[self.avg_5_no_pct][:16],away_data[self.avg_5_no_pct][16:]],axis=0).values
         diff = pd.DataFrame([(away_stats - home_data[self.avg_5_no_pct].values)])
-        print(diff)
         diff.columns = self.avg_5_no_pct_diff
         diff['team_ats'] = home_data['ats_record']
         diff['opp_ats'] = away_data['ats_record']
         g = home_data['g']
+        
+        #since taking last game to use rolling avg, correct game number is 1 + game number used
+        
+        if g == 82:
+            g = 1
+        else:
+            g = g + 1
+
         team_5 = home_data['team_last_5']
         opp_5 = away_data['team_last_5']
         team_b2b = home_data['team_b2b']
