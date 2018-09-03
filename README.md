@@ -1,6 +1,6 @@
 # NBA-point-spread-bet
 
-I am creating a model so I can win more lunch bets against my friend Eric.
+I am creating a classification model that predicts the winning of regular season NBA games relative to the spread so I can win more lunch bets against my friend Eric.
 
 ## Motivation
 Basketball is my favorite sport to watch, specifically the NBA. Go Rockets!!
