@@ -1,9 +1,19 @@
-[Motivation](#motivation)
+
 # NBA-point-spread-bet
 
 I am creating a classification model that predicts the winning of regular season NBA games relative to the spread so I can win more lunch bets against my friend Eric.
 
+# Table of Contents
+
+1. [Motivation](https://github.com/jonlin84/NBA-point-spread-bet/edit/master/README.md#motivation)
+2. [Getting Started](https://github.com/jonlin84/NBA-point-spread-bet/edit/master/README.md#getting-started)
+3. [Approach](https://github.com/jonlin84/NBA-point-spread-bet/edit/master/README.md#approach)
+4. [Thoughts on Feature Selection](https://github.com/jonlin84/NBA-point-spread-bet/edit/master/README.md#thoughts-on-feature-selection)
+5. [Results](https://github.com/jonlin84/NBA-point-spread-bet/edit/master/README.md#results)
+6. [Future Work](https://github.com/jonlin84/NBA-point-spread-bet/edit/master/README.md#future-work)
+7. [Closing Remarks](https://github.com/jonlin84/NBA-point-spread-bet/edit/master/README.md#closing-remarks)
 ## Motivation
+
 Basketball is my favorite sport to watch, specifically the NBA. Go Rockets!!
 It's even more exciting when you personally have something on the line. 
 I have a friend named Eric who loves the NBA just as much as I do, maybe even more.
@@ -12,6 +22,7 @@ Eric and I will usually wager a meal on the points spread of a game.
 The probability of either outcome of the spread is usually 50%, so you have practically even odds for whatever side you end up choosing. If this is true then my long term expected value of lunches won against Eric will be about 0. I really, really, really wanted to win more lunch bets than him so I thought I could use machine learning to help acheive that goal.
 
 ## Getting Started
+
 I started by gathering regular season spread data(closing line) from the 2014-2015 season through the 2017-2018 season. I also collected boxscore data for those seasons. With 5 seasons worth of data, I starting doing exploratory data analysis.
 
 ## Approach
@@ -41,7 +52,7 @@ I want to include additional features to better represent the current state of e
 I also want to break down team stats individual player stats. 
 An earlier idea was to use each team's previous team averages to PYMC3 to simulate games. 
 
-## Thoughts
+## Closing Remarks
 I really enjoyed coming up with a bunch of ideas and testing whether or not they worked. It was frustrating at times but reward each time you made a little progress.
 
 
