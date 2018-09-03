@@ -9,7 +9,7 @@ I am creating a classification model that predicts the winning of regular season
 2. [Getting Started](https://github.com/jonlin84/NBA-point-spread-bet/blob/master/README.md#getting-started)
 3. [Approach](https://github.com/jonlin84/NBA-point-spread-bet/blob/master/README.md#approach)
 4. [Thoughts on Feature Selection](https://github.com/jonlin84/NBA-point-spread-bet/blob/master/README.md#thoughts-on-feature-selection)
-5. [Results](https://github.com/jonlin84/NBA-point-spread-bet/blob/masterREADME.md#results)
+5. [Results](https://github.com/jonlin84/NBA-point-spread-bet/blob/master/README.md#results)
 6. [Future Work](https://github.com/jonlin84/NBA-point-spread-bet/blob/master/README.md#future-work)
 7. [Closing Remarks](https://github.com/jonlin84/NBA-point-spread-bet/blob/master/README.md#closing-remarks)
 ## Motivation
