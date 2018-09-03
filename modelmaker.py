@@ -116,8 +116,8 @@ class SpreadModel(object):
             opp_stat = rolling_avg_season[(rolling_avg_season['game_id']==gameid)& (rolling_avg_season['team']==opp)].copy()
             opp_stats =opp_stat[self.avg_5_no_pct]
             home_stats = team_stat[self.avg_5_no_pct]
-            h_off = (opp_stats.values[0][:16] - home_stats.values[0][:16])  
-            o_off = (home_stats.values[0][:16] - opp_stats.values[0][16:]) 
+            h_off = (home_stats.values[0][:16] + opp_stats.values[0][16:]) / 2
+            o_off = (opp_stats.values[0][:16] + home_stats.values[0][16:]) / 2  
             diff = pd.concat([pd.DataFrame(h_off).T,pd.DataFrame(o_off).T],axis=1)
             diff.columns = self.avg_5_no_pct_diff
             diff['team_ats'] = team_stat['ats_record'].values
@@ -147,8 +147,14 @@ class SpreadModel(object):
         away_rolling = self._current_get_rolling_avg(away,self.current_season ,6)
         home_data = home_rolling.iloc[len(away_rolling)-1].copy()
         away_data = away_rolling.iloc[len(away_rolling)-1].copy()
-        away_stats = pd.concat([away_data[self.avg_5_no_pct][:16],away_data[self.avg_5_no_pct][16:]],axis=0).values
-        diff = pd.DataFrame([(away_stats - home_data[self.avg_5_no_pct].values)])
+        #away_stats = pd.concat([away_data[self.avg_5_no_pct][16:],away_data[self.avg_5_no_pct][:16]],axis=0).values
+        away_stats = away_data[self.avg_5_no_pct].copy()
+        home_stats = home_data[self.avg_5_no_pct].copy()
+        print(away_stats)
+        #diff = pd.DataFrame([(away_stats - home_data[self.avg_5_no_pct].values)])
+        h_off = (home_stats[:16].values + away_stats[16:].values) / 2
+        o_off = (away_stats[:16].values + home_stats[16:].values) / 2  
+        diff = pd.concat([pd.DataFrame(h_off).T,pd.DataFrame(o_off).T],axis=1)
         diff.columns = self.avg_5_no_pct_diff
         diff['team_ats'] = home_data['ats_record']
         diff['opp_ats'] = away_data['ats_record']
