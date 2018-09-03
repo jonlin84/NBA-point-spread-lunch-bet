@@ -1,22 +1,26 @@
 # NBA-point-spread-bet
 
-I am creating a model to calculate probability an NBA team beats the spread for any regular season matchup.
+I am creating a model so I can win more lunch bets against my friend Eric.
 
-### Motivation
+## Motivation
 Basketball is my favorite sport to watch, specifically the NBA. Go Rockets!!
-I thought it would be a fun endeavor to try to create a model to be at least break-even when betting on the spread.
+It's even more exciting when you personally have something on the line. 
+I have a friend named Eric who loves the NBA just as much as I do, maybe even more.
+Eric and I will usually wager a meal on the points spread of a game. 
 
-### Getting Started
-I started by gathering regular season spread data(closing line) from the 2014-2015 season through the 2017-2018 season. I also collected boxscore data for those seasons. With 5 seasons worth of data, I began exploring the data and coming up with ideas.
+The probability of either outcome of the spread is usually 50%, so you have practically even odds for whatever side you end up choosing. If this is true then my long term expected value of lunches won against Eric will be about 0. I really, really, really wanted to win more lunch bets than him so I thought I could use machine learning to help acheive that goal.
 
-### Approach
-My intial idea was come up with a method to estimate how many points each team would score. Then take that distribution of scoring differences and calculate a (1 - cumulative density function of the ((-1 * spread), avg scoring difference, avg score diff variance)
+## Getting Started
+I started by gathering regular season spread data(closing line) from the 2014-2015 season through the 2017-2018 season. I also collected boxscore data for those seasons. With 5 seasons worth of data, I starting doing exploratory data analysis.
 
-ex. if the spread for the Houston Rockets is -5.5 and their average scoring difference against the Dallas Mavericks is 7.5 points with variance say 20.
+## Approach
+Train some classification models with greater than 50% accuracy when betting on the spread.
+I chose Logistic Regression, Random Forest Classifier and Gradient Boosting Classifier to work with.
 
-the probability of Houston scoring more than the spread would be (1 - cdf(5.5,7.5,20))) = 53.93%
+## Thoughts on Feature Selection
+The idea I had was to use all rolling averages of each team in a particular matchup. I started with a window length of 5 (previous 5 games) and that became the main features I used to transform my data for training. I also included the each team's record against the spread. The record was represented as the proportion of wins against the spread to total games played. 
+This column was a little tricky to create because if you just took the cumulative sum of a team's result against the spread and added it as a feature column it would introduce data leakage. So I took the cumulative sum then shifted the results and inserted a row above with 0.0 for the first game of the season. It also meant excluding the last row of the cumulative sum.
 
-I am making an assumption that all of my distributions are roughly normally distributed.
 
 
 
