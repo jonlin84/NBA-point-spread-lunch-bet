@@ -33,7 +33,11 @@ class Scrape():
             , 'Indiana':'IND','Portland':'POR','Brooklyn':'BRK', 'Golden State':'GSW','Chicago':'CHI'\
             , 'LA Lakers':'LAL','Memphis':'MEM','Atlanta':'ATL','Utah':'UTA','Minnesota':'MIN'}
 
-    
+        self.sp = {'BOS':'20722','PHI':'20731','BRK':'20749','NYK':'20747','TOR':'20742','DET':'20743','CLE':'20735','CHI':'20732','IND':'20737','MIL':'20725','CHO':'20751','MIA':'20726','ORL':'20750'
+        ,'ATL':'20734','WAS':'20746','OKC':'20728','POR':'20748','DEN':'20723','UTA':'20738','MIN':'20744','SAC':'20745','PHO':'20730','LAL':'20739','LAC':'20736','GSW':'20741','DAL':'20727',
+         'MEM':'20729','HOU':'20740','SAS':'20724','NOP':'20733'}
+
+        self.baselink = 'https://www.oddsshark.com/stats/gamelog/basketball/nba/'
     
     def build_db(self):
         big_list = self._url_list_generator()
@@ -103,6 +107,16 @@ class Scrape():
                                 'url':items,
                                 'content': r.content }
                     self.client[self.dbname]['boxscores'].insert_one(boxscore)
-
-
+    
+    def spread_populator(self):
+        for team in self.teams:
+            for year in years:
+                url = self.baselink + self.sp[team] + '/' + year
+                r = requests.get(url)
+                time.sleep(10)
+                spreadlist = {'team':team,
+                             'year': year,
+                             'url':url,
+                             'content': r.content }
+                self.client[self.dbname]['spreads'].insert_one(spreadlist)
 
