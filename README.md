@@ -18,7 +18,7 @@ I am creating a classification model that predicts the winning of regular season
 Basketball is my favorite sport to watch, specifically the NBA. Go Rockets!!
 It's even more exciting when you personally have something on the line. 
 I have a friend named Eric who loves the NBA just as much as I do, maybe even more.
-Eric and I will usually wager a meal on the points spread of a game. 
+Eric and I will usually wager a meal(usually a lunch) on the points spread of a game. 
 
 The probability of either outcome of the spread is usually 50%, so you have practically even odds for whatever side you end up choosing. If this is true then my long term expected value of lunches won against Eric will be about 0. I really, really, really wanted to win more lunch bets than him so I thought I could use machine learning to help acheive that goal.
 
