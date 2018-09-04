@@ -48,6 +48,9 @@ Using a rolling average of 6 games back offered the best results in terms of ove
 ## Bet Against Eric?
 I believe my model will perform at greater than 50% accuracy for the upcoming season. I look forward to putting my model to the test! Eric is in for a big surprise this season!!
 
+## Vegas?
+This is where it gets a little more complicated. Because Vegas takes a fee of 10% of your bet to take on your bet, break-even is no longer 50%. You need closer to 52.38% accuracy on games just so to not lose any money. The average accuracy of my model over the 4 years tested was 52.58%, slightly above break-even but not significant. 
+
 ## Future Work
 I want to include additional features to better represent the current state of each team
 I also want to break down team stats individual player stats. 
