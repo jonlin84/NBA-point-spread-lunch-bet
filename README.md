@@ -12,7 +12,7 @@ I am creating a classification model that predicts the winning of regular season
 5. [Results](https://github.com/jonlin84/NBA-point-spread-bet/blob/master/README.md#results)
 6. [Bet Against Eric](https://github.com/jonlin84/NBA-point-spread-bet/blob/master/README.md#bet-against-eric)
 7. [Future Work](https://github.com/jonlin84/NBA-point-spread-bet/blob/master/README.md#future-work)
-8. [Closing Remarks](https://github.com/jonlin84/NBA-point-spread-bet/blob/master/README.md#closing-remarks)
+8. [Closing Remarks](https://github.com/jonlin84/NBA-point-spread-bet/blob/master/README.md#closing)
 ## Motivation
 
 Basketball is my favorite sport to watch, specifically the NBA. Go Rockets!!
@@ -53,7 +53,7 @@ I want to include additional features to better represent the current state of e
 I also want to break down team stats individual player stats. 
 An earlier idea was to use each team's previous team averages to PYMC3 to simulate games. 
 
-## Closing Remarks
+## Closing
 I really enjoyed coming up with a bunch of ideas and testing whether or not they worked. It was frustrating at times but reward each time you made a little progress.
 
 
