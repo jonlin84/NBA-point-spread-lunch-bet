@@ -11,7 +11,9 @@ import numpy as np
 
 class Scrape():
     '''
-    This is used to grab boxscore data for each NBA team puts in boxscore db
+    This is used to grab boxscore data for each NBA team puts in boxscore collection the chosen
+    mongodb name
+    Pass a list of years you want scraped ex. ['2009','2010','2011']
     '''
 
     def __init__(self,years:list,dbname):
