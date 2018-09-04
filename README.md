@@ -12,7 +12,7 @@ I am creating a classification model that predicts the winning of regular season
 5. [Results](https://github.com/jonlin84/NBA-point-spread-bet/blob/master/README.md#results)
 6. [Bet Against Eric](https://github.com/jonlin84/NBA-point-spread-bet/blob/master/README.md#bet-against-eric)
 7. [Future Work](https://github.com/jonlin84/NBA-point-spread-bet/blob/master/README.md#future-work)
-8. [Closing Remarks](https://github.com/jonlin84/NBA-point-spread-bet/blob/master/README.md#closing)
+8. [Closing](https://github.com/jonlin84/NBA-point-spread-bet/blob/master/README.md#closing)
 ## Motivation
 
 Basketball is my favorite sport to watch, specifically the NBA. Go Rockets!!
