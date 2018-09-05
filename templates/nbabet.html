@@ -1,0 +1,57 @@
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+
+  <title>NBA Spread Bet Preditor</title>
+  <link rel='stylesheet' media='screen' href='nba.css'>
+  
+  <meta name="description" content="NBA Spread Bet Preditor">
+  <meta name="author" content="Jonathan Lin">
+
+</head>
+
+<body id='nba-spread-bet'>
+
+    <h1>Which team should I bet on???</h1>
+    <p>This app will give you the odds for each team with respect to the spread!</p>
+    <p>Please input team matchups!</p>
+
+
+    <div>
+      <span>home team:</span> <input id="team1"></input>
+      <span>away team:</span> <input id="team2"></input>
+      <span>spread:</span> <input id="spread"></input>
+    </div>
+  
+    <div>
+        <button type="button">Predict!</button>
+    </div>
+  
+    <div>
+          <!-- The span has an id so that later we can fill in the solution
+               using js. -->
+      <p> The solution is: <span id="solution"></span> </p>
+
+<script type="text/javascript">
+let get_values = function() {
+    let team1 = $("input#team1").val()
+    let team2 = $("input#team2").val()
+    let spread = $("input#spread").val()
+    return {'team1': String(team1),
+            'team2': String(team2),
+            'spread': parseFloat(spread)} 
+    };
+        let send_coefficient_json = function(coefficients) {
+            $.ajax({
+                url: '/solve',
+                contentType: "application/json; charset=utf-8",
+                type: 'POST',
+                success: function (data) {
+                    console.log(data);
+                },
+                data: JSON.stringify(coefficients)
+            });
+        };
+        </script>
+</body>
+</html>
