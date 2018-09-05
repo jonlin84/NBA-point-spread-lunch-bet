@@ -24,6 +24,7 @@ class SpreadModel(object):
                                 'stl', 'blk', 'tov', 'pf', 'pts', 'opp_mp', 'opp_fg', 'opp_fga', 'opp_fg3', 
                                 'opp_fg3a', 'opp_ft', 'opp_fta', 'opp_orb', 'opp_drb', 'opp_trb', 'opp_ast', 
                                 'opp_stl','opp_blk', 'opp_tov', 'opp_pf', 'opp_pts']
+        
         self.avg_5_no_pct = ['avg_mp_last_5','avg_fg_last_5','avg_fga_last_5','avg_fg3_last_5',
                             'avg_fg3a_last_5','avg_ft_last_5','avg_fta_last_5','avg_orb_last_5',
                             'avg_drb_last_5','avg_trb_last_5','avg_ast_last_5','avg_stl_last_5',
@@ -70,6 +71,10 @@ class SpreadModel(object):
 
 
     def _current_get_rolling_avg(self,team,year,rolling_avg):
+        '''
+        return rolling_avg with selected previous games back and also at_the_spread record (ats_record)
+        column
+        '''
         
         box_df = pd.read_pickle('data/THEBIGDATAFRAME.pkl')
         sp = box_df[(box_df['team']==team) & (box_df['year']==year)].copy()
@@ -141,27 +146,24 @@ class SpreadModel(object):
             return X.drop(columns=['ats']), y.drop(columns='g') 
 
 
-#this function needs to be called when user input is submitted
-    def matchup_predict_data(self,home,away,spread):
+    def matchup_predict_data(self,home:str,away:str,spread:float):
+        '''
+        Takes home team, away team as 3 letter string, spread as float
+        returns transformed dataframe for predicting
+        '''
         home_rolling = self._current_get_rolling_avg(home,self.current_season ,6)
         away_rolling = self._current_get_rolling_avg(away,self.current_season ,6)
         home_data = home_rolling.iloc[len(away_rolling)-1].copy()
         away_data = away_rolling.iloc[len(away_rolling)-1].copy()
-        #away_stats = pd.concat([away_data[self.avg_5_no_pct][16:],away_data[self.avg_5_no_pct][:16]],axis=0).values
         away_stats = away_data[self.avg_5_no_pct].copy()
         home_stats = home_data[self.avg_5_no_pct].copy()
-        print(away_stats)
-        #diff = pd.DataFrame([(away_stats - home_data[self.avg_5_no_pct].values)])
         h_off = (home_stats[:16].values + away_stats[16:].values) / 2
         o_off = (away_stats[:16].values + home_stats[16:].values) / 2  
         diff = pd.concat([pd.DataFrame(h_off).T,pd.DataFrame(o_off).T],axis=1)
         diff.columns = self.avg_5_no_pct_diff
         diff['team_ats'] = home_data['ats_record']
         diff['opp_ats'] = away_data['ats_record']
-        g = home_data['g']
-        
-        #since taking last game to use rolling avg, correct game number is 1 + game number used
-        
+        g = home_data['g']        
         if g == 82:
             g = 1
         else:
