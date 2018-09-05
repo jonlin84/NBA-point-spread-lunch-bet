@@ -35,7 +35,7 @@ The idea I had was to use all rolling averages of each team in a particular matc
 This column was a little tricky to create because if you just took the cumulative sum of a team's result against the spread and added it as a feature column it would introduce data leakage. So I took the cumulative sum then shifted the results and inserted a row above with 0.0 for the first game of the season. It also meant excluding the last row of the cumulative sum.
 
 ## Results
-Logistic Regression was the most consistent over every iteration of the train/test setup. There were only 3 instances of the 28 train/test scenarios where it failed to return at least 50.0% accuracy. I will try to include graphs of the information as well as a cleaned up jupyter notebook of my work soon.
+Logistic Regression was the most consistent over every iteration of the train/test setup. There were only 3 instances of the 24 train/test scenarios where it failed to return at least 50.0% accuracy. I will try to include graphs of the information as well as a cleaned up jupyter notebook of my work soon.
 
 ![alt text](https://github.com/jonlin84/NBA-point-spread-bet/blob/master/images/Logistic%20Regression%20Avgs%20Graph.png)
 
