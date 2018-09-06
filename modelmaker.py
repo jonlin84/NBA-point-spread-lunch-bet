@@ -5,7 +5,6 @@ import pickle
 
 
 class SpreadModel(object):
-
     '''
     creates model with specified inputs
     '''
@@ -81,6 +80,7 @@ class SpreadModel(object):
                         'opp', 'result', 'score', 'ou', 'total', 'score_diff',
                         'spread_diff', 'game_id', 'gameid', 's_double',
                         's_less_3']
+        self.model = pd.read_pickle('data/model.pkl')
 
     def _create_df_season(self, year, rolling_avg):
         final = pd.DataFrame()
@@ -217,3 +217,9 @@ class SpreadModel(object):
                 'opp_b2b': [opp_b2b]}
         df = pd.DataFrame(data=data)
         return pd.concat([df, diff], axis=1)
+
+    def predict_prob(self, X):
+        '''
+        predict probability home team covers spread
+        '''
+        return f'Probability Home Team Covers: {model.predict_prob(X)[1]*100}'
