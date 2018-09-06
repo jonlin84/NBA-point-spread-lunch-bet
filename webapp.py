@@ -18,8 +18,8 @@ def index():
 @app.route('/solve', methods=['POST'])
 def solve():
     user_data = request.json
-    home, away, spread = user_data['home'], user_data['away'],\
-                    user_data['spread']
+    home, away, spread = \
+        user_data['home'], user_data['away'], user_data['spread']
     prob = _predict_proba(home, away, spread)
     return jsonify({'Probability Home Team Wins': prob*100})
 
