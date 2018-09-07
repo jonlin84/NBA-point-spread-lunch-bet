@@ -11,8 +11,8 @@ import numpy as np
 
 class Scrape():
     '''
-    This is used to grab boxscore data for each NBA team puts
-    in boxscore collection the chose a mongodb name
+    This is used to grab spread and boxscore data for each NBA team puts
+    in boxscore collection of a chosen mongodb name
     Pass a list of years you want scraped ex. ['2009','2010','2011']
     '''
 
@@ -90,6 +90,9 @@ class Scrape():
         return container[:games]
 
     def _url_list_generator(self):
+        '''
+        builds dictionary of urls
+        '''
         biglist = {}
         for team in self.teams:
             biglist[team] = {}
@@ -117,6 +120,9 @@ class Scrape():
         return boxscores
 
     def _insert_db(self, dct):
+        '''
+        inserts document in collection
+        '''
         for team in self.teams:
             for year in self.years:
                 for items in dct[team]['year'][year]:
@@ -129,7 +135,12 @@ class Scrape():
                                 'content': r.content}
                     self.client[self.dbname]['boxscores'].insert_one(boxscore)
 
-    def spread_populator(self):
+    def build_spread_db(self, collection_name='spreads'):
+        '''
+        scrapes spread data from oddsshark.com
+        places in same mongodb database with specified collection
+        name, default name is spreads
+        '''
         for team in self.teams:
             for year in self.years:
                 url = self.baselink + self.sp[team] + '/' + year
@@ -140,4 +151,5 @@ class Scrape():
                         'year': year,
                         'url': url,
                         'content': r.content}
-                self.client[self.dbname]['spreads'].insert_one(spreadlist)
+                self.client[self.dbname][collection_name].insert_one(
+                                                                spreadlist)
