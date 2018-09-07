@@ -43,7 +43,7 @@ Random Forest and Gradient Boosting both had several instances where the model p
 
 ![alt text](https://github.com/jonlin84/NBA-point-spread-bet/blob/master/images/Logistic%20Regression%20Graph.png)
 
-Using a rolling average of 6 games back offered the best results in terms of overall accuracy so I decided to train my model for to predict season using that window length. 
+Using a rolling average of 6 games back offered the best results in terms of overall accuracy so I decided to train my model to predict the upcoming season using that window length. 
 
 ## Bet Against Eric?
 I believe my model will perform at greater than 50% accuracy for the upcoming season. I look forward to putting my model to the test! Eric is in for a big surprise this season!!
